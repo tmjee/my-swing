@@ -29,7 +29,6 @@ public class MenuState extends AbstractState {
 
     @Override
     public void render(Graphics g) {
-        g.drawString("test", 10, 10);
         g.drawImage(Resources.IMAGE_WELCOME, 0, 0, null);
     }
 
