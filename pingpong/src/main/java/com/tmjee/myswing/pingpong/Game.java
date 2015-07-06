@@ -2,6 +2,8 @@ package com.tmjee.myswing.pingpong;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,12 +58,18 @@ public class Game extends JPanel implements Runnable {
 
             setCurrentState(new LoadState());
             while(running) {
-                prepareGameImage();
                 AbstractState s = currentState;
+
+                prepareGameImage();
+
+                Image i = gameImage;
+                Graphics g = i.getGraphics();
+
                 s.update();
-                Graphics g = gameImage.getGraphics();
                 s.render(g);
+
                 repaint();
+
                 try {
                     Thread.sleep(14);
                 } catch(InterruptedException e) {
