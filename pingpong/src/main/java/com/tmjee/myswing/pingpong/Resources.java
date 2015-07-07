@@ -17,19 +17,27 @@ public class Resources {
     private static final Logger LOG = Logger.getLogger(Resources.class.getName());
 
     public static volatile Image IMAGE_WELCOME;
+    public static Image LINE;
+
+    public static Color DARK_BLUE;
+    public static Color DARK_RED;
 
 
     public static void load() {
         try {
             LOG.log(Level.FINE, "load resources");
+
             IMAGE_WELCOME = loadImage("welcome.png");
+            LINE = loadImage("line.png");
+
+            DARK_BLUE = new Color(25 ,83, 105);
+            DARK_RED = new Color(105, 13, 13);
         }catch(Exception e) {
             LOG.log(Level.WARNING, e.toString(), e);
         }
     }
 
     public static Image loadImage(String resource) throws IOException {
-        System.out.println(Thread.currentThread().getContextClassLoader().getResource(resource));
         return ImageIO.read(Thread.currentThread().getContextClassLoader().getResource(resource));
     }
 

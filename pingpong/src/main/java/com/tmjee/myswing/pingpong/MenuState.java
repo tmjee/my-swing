@@ -34,16 +34,20 @@ public class MenuState extends AbstractState {
 
     @Override
     public void onClick(MouseEvent e) {
-
+        changeToPlayState();
     }
 
     @Override
     public void onKeyPress(KeyEvent e) {
-
+        changeToPlayState();
     }
 
     @Override
     public void onKeyRelease(KeyEvent e) {
+    }
 
+    private void changeToPlayState() {
+        changeState(new PlayState());
+        LOG.log(Level.INFO, "going to Play state");
     }
 }

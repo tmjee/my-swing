@@ -15,10 +15,12 @@ public class Game extends JPanel implements Runnable {
 
     private static final Logger LOG = Logger.getLogger(Game.class.getName());
 
-    private final int width;
-    private final int height;
+    public final int width;
+    public final int height;
 
     private volatile Image gameImage;
+
+    private final InputHandler inputHandler;
 
     private Thread gameThread;
     private volatile boolean running;
@@ -31,6 +33,7 @@ public class Game extends JPanel implements Runnable {
         setPreferredSize(new Dimension(width, height));
         setFocusable(true);
         requestFocus();
+        this.inputHandler = new InputHandler();
     }
 
 
@@ -45,6 +48,9 @@ public class Game extends JPanel implements Runnable {
     }
 
     public void start() {
+        LOG.log(Level.INFO, "testing");
+        Game.this.addKeyListener(inputHandler);
+        Game.this.addMouseListener(inputHandler);
         running = true;
         gameThread = new Thread(this, "gameThread");
         gameThread.start();
@@ -56,10 +62,13 @@ public class Game extends JPanel implements Runnable {
 
     public void run() {
 
-            setCurrentState(new LoadState());
+            AbstractState initialState = new LoadState();
+            setCurrentState(initialState);
+
             while(running) {
                 AbstractState s = currentState;
 
+                inputHandler.setState(s);
                 prepareGameImage();
 
                 Image i = gameImage;
@@ -68,6 +77,7 @@ public class Game extends JPanel implements Runnable {
                 s.update();
                 s.render(g);
 
+                gameImage = i;
                 repaint();
 
                 try {
@@ -76,8 +86,6 @@ public class Game extends JPanel implements Runnable {
                     LOG.log(Level.WARNING, e.toString(), e);
                 }
             }
-
-        System.exit(0);
     }
 
     @Override
@@ -93,7 +101,7 @@ public class Game extends JPanel implements Runnable {
     private void prepareGameImage() {
         if (gameImage == null) {
             gameImage = createImage(width, height);
+            gameImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         }
     }
-
 }
